@@ -1,0 +1,16 @@
+# Created by .ignore support plugin (hsz.mobi)
+
+# myconfig
+myconfig.conf
+logs/*.*
+.idea
+apps/fastrunner/migrations/[0]*.py
+apps/users/migrations/[0]*.py
+media/*
+tempWorkDir/*.*
+
+#python
+*.py[cod]
+*.so
+*.egg
+*.egg-info

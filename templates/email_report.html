@@ -1,0 +1,192 @@
+<head>
+  <meta content="text/html; charset=utf-8" http-equiv="content-type" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ html_report_name if html_report_name != None else 'TestReport' }}</title>
+  <style>
+    body {
+      background-color: #f2f2f2;
+      color: #333;
+      margin: 0 auto;
+      width: 960px;
+    }
+    #summary, #details, #errorDetails {
+      width: 960px;
+    }
+    #summary th {
+      background-color: skyblue;
+      padding: 5px 12px;
+    }
+    #summary td {
+      background-color: lightblue;
+      text-align: center;
+      padding: 4px 8px;
+    }
+    #details th {
+      background-color: skyblue;
+      padding: 5px 12px;
+    }
+    #details td {
+      background-color: lightblue;
+      padding: 5px 12px;
+    }
+    #details .detail {
+      background-color: lightgrey;
+      font-size: smaller;
+      padding: 5px 10px;
+      text-align: center;
+    }
+    #details .success {
+      background-color: greenyellow;
+    }
+    #details .error {
+      background-color: red;
+    }
+    #details .failure {
+      background-color: salmon;
+    }
+    #details .skipped {
+      background-color: gray;
+    }
+    #errorDetails .failure{
+      background-color: salmon;
+    }
+    #errorDetails th {
+      background-color: skyblue;
+      padding: 5px 12px;
+    }
+    #errorDetails td {
+      background-color: lightblue;
+      padding: 5px 12px;
+    }
+    .button {
+      font-size: 1em;
+      padding: 6px;
+      width: 4em;
+      text-align: center;
+      background-color: #06d85f;
+      border-radius: 20px/50px;
+      cursor: pointer;
+      transition: all 0.3s ease-out;
+    }
+    a.button{
+      color: gray;
+      text-decoration: none;
+    }
+    .button:hover {
+      background: #2cffbd;
+    }
+
+    .overlay {
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(0, 0, 0, 0.7);
+      transition: opacity 500ms;
+      visibility: hidden;
+      opacity: 0;
+    }
+    .overlay:target {
+      visibility: visible;
+      opacity: 1;
+    }
+
+    .popup {
+      margin: 70px auto;
+      padding: 20px;
+      background: #fff;
+      border-radius: 5px;
+      width: 30%;
+      position: relative;
+      transition: all 5s ease-in-out;
+    }
+
+    .popup h2 {
+      margin-top: 0;
+      color: #333;
+      font-family: Tahoma, Arial, sans-serif;
+    }
+    .popup .close {
+      position: absolute;
+      top: 20px;
+      right: 30px;
+      transition: all 200ms;
+      font-size: 30px;
+      font-weight: bold;
+      text-decoration: none;
+      color: #333;
+    }
+    .popup .close:hover {
+      color: #06d85f;
+    }
+    .popup .content {
+      max-height: 30%;
+      overflow: auto;
+      text-align: left;
+    }
+
+    @media screen and (max-width: 700px) {
+      .box {
+        width: 70%;
+      }
+      .popup {
+        width: 70%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <h3>{{ report_name }}</h3>
+
+  <h4>概览:</h4>
+  <table id="summary">
+
+    <tr>
+      <th>START AT</th>
+      <td colspan="2">{{time_start}}</td>
+    </tr>
+    <tr>
+      <th>STAT</th>
+      <th>TASKS&nbsp;(pass/error)</th>
+      <th>TESTCASES&nbsp;(success/fail)</th>
+    </tr>
+    <tr>
+      <td>total(details) =></td>
+      <td>{{tasks}}&nbsp;({{pass_task}}/{{fail_task}})</td>
+      <td>{{testsRun}}&nbsp;({{successes}}/{{failures}})</td>
+    </tr>
+  </table>
+
+  <h4>测试用例:</h4>
+  <table id="details">
+    <tr>
+      <th>Status</th>
+      <th>Detail Report Link</th>
+    </tr>
+    {% for test in tests %}
+      <tr>
+        <th class="{{test.status}}" style="width:10em;">{{test.status}}</th>
+        <td style="text-align:center;">{{ test.link }}</td>
+      </tr>
+    {% endfor %}
+  </table>
+
+  {% if error_list|length %}
+    <h4>错误信息:</h4>
+    <table id="errorDetails">
+      <tr>
+        <th>Task</th>
+        <th>Error Message</th>
+      </tr>
+      {% for err in error_list %}
+        <tr>
+            <td class="failure" style="width:10em;">{{err.proj}}</td>
+            <td style="text-align:left;"><pre>{{ err.content | e }}</pre></td>
+        </tr>
+      {% endfor %}
+    </table>
+  {% endif %}
+
+</body>
