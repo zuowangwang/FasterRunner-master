@@ -1,8 +1,5 @@
-# FasterRunner
+# RENDERBUS
 
-[![LICENSE](https://img.shields.io/github/license/HttpRunner/FasterRunner.svg)](https://github.com/HttpRunner/FasterRunner/blob/master/LICENSE) [![travis-ci](https://travis-ci.org/HttpRunner/FasterRunner.svg?branch=master)](https://travis-ci.org/HttpRunner/FasterRunner) ![pyversions](https://img.shields.io/pypi/pyversions/Django.svg)
-
-> FasterRunner that depends FasterWeb
 
 ## 注意
 如果在20190828日期之前，已经部署过我的FasterRunner,此次更新时，需要一些手动操作：
