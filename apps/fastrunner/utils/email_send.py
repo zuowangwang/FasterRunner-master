@@ -132,6 +132,7 @@ def prepare_email_content(runresult, subject_name):
     :param subject_name: html名称
     :return: email conetnt
     """
+    
     batch_result = {}
     batch_result['report_name'] = subject_name
     batch_result["tasks"] = runresult["tasks"]

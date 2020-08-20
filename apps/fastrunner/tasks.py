@@ -106,6 +106,7 @@ def schedule_debug_suite(*args, **kwargs):
                 subject_name += " - 失败：" + ",".join([err_msg["proj"] for err_msg in runresult["error_list"]])
             else:
                 subject_name += " - 成功！"
+            
             html_conetnt = prepare_email_content(runresult, subject_name)
             send_file_path = prepare_email_file(summary_report)
             send_status = send_result_email(subject_name, kwargs["receiver"], kwargs["mail_cc"], send_html_content=html_conetnt, send_file_path=send_file_path)
