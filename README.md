@@ -1,16 +1,6 @@
 # RENDERBUS
 
 
-## 注意
-如果在20190828日期之前，已经部署过我的FasterRunner,此次更新时，需要一些手动操作：
-1. 拉取新代码后, 先将 apps/users/models.py 中 belong_project 这一行注释掉
-2. python manage.py makemigrations，生成 0001_initial 文件
-3. python manage.py dbshell 进入数据库 或者手动修改数据库
-  - INSERT INTO django_migrations (app, name, applied) VALUES ('users', '0001_initial', CURRENT_TIMESTAMP);
-  - UPDATE django_content_type SET app_label = 'users' WHERE app_label = 'auth' and model = 'user';
-4. python manage.py migrate
-5. 去除 1 中的注释，再次执行 python manage.py makemigrations ，python manage.py migrate
-
 
 ### 简介
 在上一位作者的基础上，完善并且丰富了平台的功能，支持全部的httprunner特性重要更新如下：
@@ -105,3 +95,31 @@
 - xadmin后台添加小组件报错，注释掉python包里的：/site-packages/django/forms/boundfield.py中的大概93行  ```#renderer=self.form.renderer```
 - 如果测试用例运行结果数据比较大的话，更改mysql配置文件[mysqld]：max_allowed_packet=1073741824; 这是1G的大小。
 - 项目中途更新用户表：https://www.caktusgroup.com/blog/2019/04/26/how-switch-custom-django-user-model-mid-project/
+
+
+#####  需要添加的功能
+-1，如果当前接口有提取变量，把api提取的变量，插入到全局变量里面
+-2，api请求的data ，可以用$变量获取测试用例
+-3，新增导入测试用例接口
+-4，邮件模板更改，需要加入执行成功率，接口运行总数
+-5，帮助页面，新增接口，可以在线修改
+-6，增加性能接口locust
+-7，接口复制到其他模块
+-8，接口编辑页面，添加：保存为按钮
+-9，接口调试页面，页面修正，上下左右边框
+-10，新增甘特图日期排期图：所有项目，排期规划，人员显示，可标记已完成，默认展示未完成时间段
+-11，项目页面增加，项目接口统计
+-12，数据库备份，一个星期备份一次，定时删除半年前的备份
+-13，定时删除测试报告，删除半年前的
+-14，项目页面增加，最近半个月运行情况曲线图，每天运行了什么用例，成功失败多少条
+-15，
+
+
+
+
+
+
+
+
+
+ 

@@ -228,8 +228,9 @@ class VariablesView(GenericViewSet):
           value:str
         }
         """
+        
         pk = kwargs['pk']
-
+        
         try:
             variables = models.Variables.objects.get(id=pk)
 
