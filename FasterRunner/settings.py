@@ -123,11 +123,11 @@ WSGI_APPLICATION = 'FasterRunner.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'FasterRunner1',
-        'USER': 'root',
-        'PASSWORD': '123456',
-        'HOST': '127.0.0.1',
-        'PORT': '3306',
+        'NAME': database_name,
+        'USER': database_user,
+        'PASSWORD': database_password,
+        'HOST': database_host,
+        'PORT': database_port
     }
 }
 

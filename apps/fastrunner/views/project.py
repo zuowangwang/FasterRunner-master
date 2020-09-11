@@ -36,9 +36,6 @@ class ProjectView(ModelViewSet):
     permission_classes = (DjangoModelPermissions, IsBelongToProject)
 
     def get_queryset(self):
-        projects = models.Project.objects.annotate(count=Count("api"))
-        # for p in projects:
-        #     num = p.api_set.all().count()
         if self.request.user.is_superuser:
             return models.Project.objects.annotate(count=Count("api")).all().order_by('-create_time')
         project_id_list = UserModel.objects.filter(id=self.request.user.id).values_list('belong_project', flat=True)
