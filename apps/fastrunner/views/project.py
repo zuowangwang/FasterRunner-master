@@ -1,5 +1,6 @@
 import os
 import xlrd
+from django.db.models import Count
 from xlrd.biffh import XLRDError
 
 from django.core.exceptions import ObjectDoesNotExist
@@ -35,8 +36,11 @@ class ProjectView(ModelViewSet):
     permission_classes = (DjangoModelPermissions, IsBelongToProject)
 
     def get_queryset(self):
+        projects = models.Project.objects.annotate(count=Count("api"))
+        # for p in projects:
+        #     num = p.api_set.all().count()
         if self.request.user.is_superuser:
-            return models.Project.objects.all().order_by('-create_time')
+            return models.Project.objects.annotate(count=Count("api")).all().order_by('-create_time')
         project_id_list = UserModel.objects.filter(id=self.request.user.id).values_list('belong_project', flat=True)
         return models.Project.objects.filter(id__in=[_ for _ in project_id_list]).order_by('-update_time')
 

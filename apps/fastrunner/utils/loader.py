@@ -330,6 +330,7 @@ def load_test(test, project=None):
 def parse_summary(summary):
     """序列化summary
     """
+    content = ""
     for detail in summary["details"]:
 
         for record in detail["records"]:
@@ -343,13 +344,15 @@ def parse_summary(summary):
             for key, value in record["meta_data"]["response"].items():
                 if isinstance(value, bytes):
                     record["meta_data"]["response"][key] = value.decode("utf-8")
+                    if key == "content":
+                        content = record["meta_data"]["response"][key]
                 if isinstance(value, RequestsCookieJar):
                     record["meta_data"]["response"][key] = requests.utils.dict_from_cookiejar(value)
 
             if "text/html" in record["meta_data"]["response"]["content_type"]:
                 record["meta_data"]["response"]["content"] = \
                     BeautifulSoup(record["meta_data"]["response"]["content"], features="html.parser").prettify()
-
+    summary["content"] = content
     return summary
 
 

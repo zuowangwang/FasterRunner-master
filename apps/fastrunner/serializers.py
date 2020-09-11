@@ -15,10 +15,14 @@ class ProjectSerializer(serializers.ModelSerializer):
     """
     项目信息序列化
     """
+    count = serializers.SerializerMethodField()
 
     class Meta:
         model = models.Project
         fields = '__all__'
+
+    def get_count(self, obj):
+        return obj.count
 
 
 class RelationSerializer(serializers.ModelSerializer):

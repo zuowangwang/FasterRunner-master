@@ -12,6 +12,7 @@ from fastrunner.utils.decorator import request_log
 from fastrunner.utils.host import parse_host
 from fastrunner.utils.parser import Format
 from fastrunner.utils import loader
+from fastrunner.utils.variable_operat import add_global_variable, get_para
 from fastrunner.utils.permissions import IsBelongToProject
 from fastrunner import models
 
@@ -31,6 +32,10 @@ config_err = {
 def run_api(request):
     """ run api by body
     """
+    variable_data = {
+        "extracts":request.data.get("extract", {}).get("extract"),
+        "id": request.data.get("project", "")
+    }
     name = request.data.pop('config')
     host = request.data.pop("host")
     api = Format(request.data)
@@ -74,6 +79,8 @@ def run_api(request):
         summary = loader.debug_api(api.testcase, api.project, config=parse_host(host, config))
     except Exception as e:
         return Response({'traceback': str(e)}, status=400)
+    variable_data["content"] = summary["content"]
+    add_global_variable(**variable_data)
     return Response(summary)
 
 
