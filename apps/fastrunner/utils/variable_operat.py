@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 import json
-import re
 import logging
 import traceback
 from fastrunner import models
@@ -12,7 +11,7 @@ def get_para(keyword,text):
 
     """
     content = json.loads(text.lower())
-    key = content["data"].get(keyword, "")
+    key = content["data"].get(keyword.lower().strip(), "")
     return key
 
 
