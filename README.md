@@ -101,7 +101,7 @@
 - 数据库启动：           net start mysql                       （管理员cmd输入启动）
 - MQ服务异步启动： RabbitMQ Service - start  （启动栏管理员右键启动）
 - node启动：          npm run dev  前端服务
-- 后台启动：           python manage.py runserver  
+- 后台启动：           python manage.py runserver  #python manage.py runserver 192.168.3.27:8080
 - 异步处理启动：     celery -A FasterRunner worker -l info  > ./logs/beat.log
 - 日志监控启动：     python manage.py celery beat -l info  > ./logs/worker.log
 
