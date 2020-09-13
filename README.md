@@ -96,24 +96,14 @@
 - 如果测试用例运行结果数据比较大的话，更改mysql配置文件[mysqld]：max_allowed_packet=1073741824; 这是1G的大小。
 - 项目中途更新用户表：https://www.caktusgroup.com/blog/2019/04/26/how-switch-custom-django-user-model-mid-project/
 
-
-#####  需要添加的功能
--1，如果当前接口有提取变量，把api提取的变量，插入到全局变量里面
--2，api请求的data ，可以用$变量获取测试用例
--3，新增导入测试用例接口
--4，邮件模板更改，需要加入执行成功率，接口运行总数
--5，帮助页面，新增接口，可以在线修改
--6，增加性能接口locust
--7，接口复制到其他模块
--8，接口编辑页面，添加：保存为按钮
--9，接口调试页面，页面修正，上下左右边框
--10，新增甘特图日期排期图：所有项目，排期规划，人员显示，可标记已完成，默认展示未完成时间段
--11，项目页面增加，项目接口统计
--12，数据库备份，一个星期备份一次，定时删除半年前的备份
--13，定时删除测试报告，删除半年前的
--14，项目页面增加，最近半个月运行情况曲线图，每天运行了什么用例，成功失败多少条
--15，
-
+##### 其他注意点
+- windows 本地开发
+- 数据库启动：           net start mysql                       （管理员cmd输入启动）
+- MQ服务异步启动： RabbitMQ Service - start  （启动栏管理员右键启动）
+- node启动：          npm run dev  前端服务
+- 后台启动：           python manage.py runserver  
+- 异步处理启动：     celery -A FasterRunner worker -l info  > ./logs/beat.log
+- 日志监控启动：     python manage.py celery beat -l info  > ./logs/worker.log
 
 
 
