@@ -32,10 +32,6 @@ config_err = {
 def run_api(request):
     """ run api by body
     """
-    variable_data = {
-        "extracts":request.data.get("extract", {}).get("extract"),
-        "id": request.data.get("project", "")
-    }
     name = request.data.pop('config')
     host = request.data.pop("host")
     api = Format(request.data)
@@ -79,9 +75,6 @@ def run_api(request):
         summary = loader.debug_api(api.testcase, api.project, config=parse_host(host, config))
     except Exception as e:
         return Response({'traceback': str(e)}, status=400)
-    #variable_data["content"] = summary["content"]
-    #add_global_variable(**variable_data)
-    #添加提取表达式结果到全局变量  有问题
     return Response(summary)
 
 
@@ -125,7 +118,6 @@ def run_api_pk(request, **kwargs):
         summary = loader.debug_api(test_case, api.project.id, config=parse_host(host, config))
     except Exception as e:
         return Response({'traceback': str(e)}, status=400)
-
     return Response(summary)
 
 
@@ -187,7 +179,6 @@ def run_api_tree(request):
             summary = loader.debug_api(test_case, project, config=parse_host(host, config))
         except Exception as e:
             return Response({'traceback': str(e)}, status=400)
-
     return Response(summary)
 
 

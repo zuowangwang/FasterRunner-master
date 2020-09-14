@@ -10,7 +10,6 @@ import tempfile
 import types
 import requests
 import yaml
-import traceback
 from bs4 import BeautifulSoup
 from httprunner import HttpRunner, logger
 from requests.cookies import RequestsCookieJar
@@ -18,6 +17,7 @@ from requests.cookies import RequestsCookieJar
 from fastrunner import models
 from fastrunner.utils.parser import Format
 from FasterRunner.settings import BASE_DIR
+from fastrunner.utils.variable_operat import add_global_variable
 
 logger.setup_logger('INFO')
 
@@ -242,6 +242,14 @@ def debug_suite(suite, project, obj, config, save=True):
         summary = parse_summary(runner.summary)
         if save:
             save_summary("", summary, project, type=1)
+        for testcase in suite:
+            variable_data = {
+                "extracts": testcase.get("extract", []),
+                "id": project,
+                "content": summary['content'].get(testcase['name'], "")
+            }
+            print(111, variable_data)
+            add_global_variable(**variable_data)
         return summary
     except Exception as e:
         raise SyntaxError(str(e))
@@ -288,6 +296,13 @@ def debug_api(api, project, name=None, config=None, save=False, test_data=None, 
         summary = parse_summary(runner.summary)
         if save:
             save_summary(report_name, summary, project, type=1)
+        for testcase in api:
+            variable_data = {
+                "extracts": testcase.get("extract", []),
+                "id": project,
+                "content": summary['content'].get(testcase['name'], "")
+            }
+            add_global_variable(**variable_data)
         return summary
     except Exception as e:
         raise SyntaxError(str(e))
@@ -330,7 +345,7 @@ def load_test(test, project=None):
 def parse_summary(summary):
     """序列化summary
     """
-    content = ""
+    content = {}
     for detail in summary["details"]:
 
         for record in detail["records"]:
@@ -345,7 +360,9 @@ def parse_summary(summary):
                 if isinstance(value, bytes):
                     record["meta_data"]["response"][key] = value.decode("utf-8")
                     if key == "content":
-                        content = record["meta_data"]["response"][key]
+                        content.update({
+                            record['name']: record["meta_data"]["response"][key]
+                        })
                 if isinstance(value, RequestsCookieJar):
                     record["meta_data"]["response"][key] = requests.utils.dict_from_cookiejar(value)
 
