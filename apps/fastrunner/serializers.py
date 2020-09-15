@@ -260,3 +260,12 @@ class LockFilesSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.LockFiles
         fields = "__all__"
+
+
+class HelperSerializer(serializers.ModelSerializer):
+    """
+    帮助信息序列化
+    """
+    class Meta:
+        models = models.Helper
+        fields = "__all__"

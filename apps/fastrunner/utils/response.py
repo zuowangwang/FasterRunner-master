@@ -344,3 +344,15 @@ SYSTEM_ERROR = {
     "success": False,
     "msg": "System Error"
 }
+
+HELPER_NOT_EXISTS = {
+    "code": "9998",
+    "success": False,
+    "msg": "指定的帮助文档不存在"
+}
+
+HELPER_UPDATE_ERROR = {
+    "code": "9997",
+    "success": False,
+    "msg": "更新异常失败"
+}

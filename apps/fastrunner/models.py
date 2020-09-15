@@ -264,3 +264,16 @@ class Pycode(BaseTable):
 
     def __str__(self):
         return self.name
+
+
+class Helper(BaseTable):
+    """
+    帮助信息
+    """
+    class Meta:
+        verbose_name = "帮助信息"
+        verbose_name_plural = verbose_name
+
+    title = models.CharField(max_length=255, null=False, verbose_name="标题")
+    content = models.TextField(verbose_name="内容")
+    is_show = models.BooleanField(default=False)
