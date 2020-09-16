@@ -7,8 +7,8 @@ from fastrunner import models, serializers
 from rest_framework.viewsets import GenericViewSet
 from rest_framework.response import Response
 
-from utils.decorator import request_log
-from utils.permissions import IsBelongToProject
+from fastrunner.utils.decorator import request_log
+from fastrunner.utils.permissions import IsBelongToProject
 from fastrunner.utils import response
 
 
