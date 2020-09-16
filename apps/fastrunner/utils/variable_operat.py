@@ -29,18 +29,20 @@ def get_para(val, text):
     """get para.
 
     """
-    content = json.loads(text)
+    content = text if isinstance(text, dict) else json.loads(text)
     keys = val.split(".")[1:]
     value = get_value(content, keys)
     return value
 
 
-def add_global_variable(extracts, id, content):
+def add_global_variable(extracts, id, content, response):
     project = models.Project.objects.get(id=id)
     for ext in extracts:
         try:
             for k, v in ext.items():
-                val = get_para(v, content)
+                val = get_para(v, content) or get_para(v, response)
+                if not val:
+                    continue
                 _, tag = models.Variables.objects.update_or_create(project=project, key=k,
                                                                    defaults={"value": val})
         except Exception as e:

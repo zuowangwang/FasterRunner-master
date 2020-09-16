@@ -246,9 +246,9 @@ def debug_suite(suite, project, obj, config, save=True):
             variable_data = {
                 "extracts": testcase.get("extract", []),
                 "id": project,
-                "content": summary['content'].get(testcase['name'], "")
+                "content": summary['content'].get(testcase['name'], ""),
+                "response": summary['response'].get(testcase['name'], "")
             }
-            print(111, variable_data)
             add_global_variable(**variable_data)
         return summary
     except Exception as e:
@@ -300,7 +300,8 @@ def debug_api(api, project, name=None, config=None, save=False, test_data=None, 
             variable_data = {
                 "extracts": testcase.get("extract", []),
                 "id": project,
-                "content": summary['content'].get(testcase['name'], "")
+                "content": summary['content'].get(testcase['name'], ""),
+                "response": summary['response'].get(testcase['name'], "")
             }
             add_global_variable(**variable_data)
         return summary
@@ -346,10 +347,9 @@ def parse_summary(summary):
     """序列化summary
     """
     content = {}
+    resp = {}
     for detail in summary["details"]:
-
         for record in detail["records"]:
-
             for key, value in record["meta_data"]["request"].items():
                 if isinstance(value, bytes):
                     record["meta_data"]["request"][key] = value.decode("utf-8")
@@ -369,7 +369,12 @@ def parse_summary(summary):
             if "text/html" in record["meta_data"]["response"]["content_type"]:
                 record["meta_data"]["response"]["content"] = \
                     BeautifulSoup(record["meta_data"]["response"]["content"], features="html.parser").prettify()
+
+            resp.update({
+                record['name']: record["meta_data"]["response"]
+            })
     summary["content"] = content
+    summary["response"] = resp
     return summary
 
 
