@@ -102,17 +102,17 @@ def schedule_debug_suite(*args, **kwargs):
 
             project_name = models.Project.objects.get(id=project).name
             # subject_name = peoject_name + ' - ' + kwargs["task_name"]
-            subject_name = "{project_name} - {task_name} - {successes}/{total}".format(
+            print(json.dumps(summary_report["stat"], indent=4))
+            subject_name = "{project_name} - {task_name} - 成功 / 总接口[ {successes} / {total} ]".format(
                 project_name=project_name,
                 task_name=kwargs["task_name"],
-                successes=summary_report["success"],
+                successes=summary_report["stat"]["successes"],
                 total=summary_report["stat"]["testsRun"]
             )
             if runresult["fail_task"] > 0:
                 subject_name += " - 失败：" + ",".join([err_msg["proj"] for err_msg in runresult["error_list"]])
             else:
                 subject_name += " - 成功！"
-            
             html_conetnt = prepare_email_content(runresult, subject_name)
             send_file_path = prepare_email_file(summary_report)
             send_status = send_result_email(subject_name, kwargs["receiver"], kwargs["mail_cc"], send_html_content=html_conetnt, send_file_path=send_file_path)
