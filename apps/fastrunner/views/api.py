@@ -72,7 +72,7 @@ class APITemplateView(GenericViewSet):
                     'project': models.Project.objects.get(id=api.project),
                     'relation': api.relation
                 }
-                apis.append(api_body)
+                apis.append(models.API(**api_body))
         else:
             api = Format(request.data)
             api.parse()
@@ -85,7 +85,7 @@ class APITemplateView(GenericViewSet):
                 'project': models.Project.objects.get(id=api.project),
                 'relation': api.relation
             }
-            apis.append(api_body)
+            apis.append(models.API(**api_body))
         try:
             models.API.objects.bulk_create(apis)
         except DataError:
