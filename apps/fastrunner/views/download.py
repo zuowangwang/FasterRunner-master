@@ -25,7 +25,7 @@ class DownloadView(APIView):
     def post(self, request, **kwargs):
         """下载文件
             请求参数：{
-                fileType: int (1:testdata, 2: report_excel 3: report_html)
+                fileType: int (1:testdata, 2: report_excel 3: report_html 4: api_templates)
                 id: int,
                 project: int
             }
@@ -39,6 +39,10 @@ class DownloadView(APIView):
         try:
             if file_type == 1:
                 fileObject = models.ModelWithFileField.objects.get(project_id=project, id=idno)
+                filename = fileObject.name
+                filepath = os.path.join(MEDIA_ROOT, str(fileObject.file))
+            elif file_type == 4:
+                fileObject = models.APITemplateFile.objects.get(project_id=project, id=idno)
                 filename = fileObject.name
                 filepath = os.path.join(MEDIA_ROOT, str(fileObject.file))
             else:

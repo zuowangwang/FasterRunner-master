@@ -226,6 +226,20 @@ class ModelWithFileField(BaseTable):
     def __str__(self):
         return self.name
 
+class APITemplateFile(BaseTable):
+    """
+    API上传模板
+    """
+    class Meta:
+        verbose_name = "API上传模板"
+        verbose_name_plural = verbose_name
+        unique_together = [['project', 'name']]
+
+    project = models.ForeignKey(Project, on_delete=models.CASCADE)
+    name = models.CharField(max_length=50)
+    file = models.FileField(upload_to='api_templates', unique=True, null=True, blank=True)
+    relation = models.IntegerField("节点id", null=False, default=1)
+
 
 class LockFiles(BaseTable):
     """
