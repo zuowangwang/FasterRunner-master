@@ -51,23 +51,47 @@ class APITemplateView(GenericViewSet):
         """
         新增一个接口
         """
+        apis = []
+        if request.data.get("bulk_add"):
+            project_id = int(request.data.get("project"))
+            node_id = int(request.data.get("nodeId"))
+            temps = request.data.get("interfaces", {})
+            for temp in temps.values():
+                temp.update({
+                    "project": project_id,
+                    "nodeId": node_id
+                })
+                api = Format(temp)
+                api.parse()
 
-        api = Format(request.data)
-        api.parse()
+                api_body = {
+                    'name': api.name,
+                    'body': api.testcase,
+                    'url': api.url,
+                    'method': api.method,
+                    'project': models.Project.objects.get(id=api.project),
+                    'relation': api.relation
+                }
+                apis.append(api_body)
+        else:
+            api = Format(request.data)
+            api.parse()
 
-        api_body = {
-            'name': api.name,
-            'body': api.testcase,
-            'url': api.url,
-            'method': api.method,
-            'project': models.Project.objects.get(id=api.project),
-            'relation': api.relation
-        }
-
+            api_body = {
+                'name': api.name,
+                'body': api.testcase,
+                'url': api.url,
+                'method': api.method,
+                'project': models.Project.objects.get(id=api.project),
+                'relation': api.relation
+            }
+            apis.append(api_body)
         try:
-            models.API.objects.create(**api_body)
+            models.API.objects.bulk_create(apis)
         except DataError:
             return Response(response.DATA_TO_LONG)
+        except Exception as e:
+            return Response({"error": str(e)})
 
         return Response(response.API_ADD_SUCCESS)
 

@@ -15,10 +15,8 @@ from fastrunner.utils import response
 class HelperView(GenericViewSet):
     serializer_class = serializers.HelperSerializer
     permission_classes = (DjangoModelPermissions, IsBelongToProject)
+    queryset = models.Helper.objects
 
-    def get_queryset(self):
-        queryset = models.Helper.objects.filter(is_show=True)
-        return queryset
 
     @method_decorator(request_log(level='INFO'))
     def single(self, request, **kwargs):
@@ -26,7 +24,7 @@ class HelperView(GenericViewSet):
         查询当前展示的帮助信息
         """
         try:
-            helper = self.get_queryset().get(id=kwargs['pk'])
+            helper = self.queryset.get(id=kwargs['pk'])
         except:
             return Response(response.HELPER_NOT_EXISTS)
 
@@ -45,10 +43,32 @@ class HelperView(GenericViewSet):
         """
         pk = kwargs['pk']
         try:
-            helper = models.Helper.objects
-            title = request.data.get('title', '') or helper.get(id=pk).title
-            txt = request.data.get('content', '') or helper.get(id=pk).content
-            helper.filter(id=pk).update(title=title, content=txt, is_show=True)
-            return self.single(request, **kwargs)
+            title = request.data.get('title', '') or self.queryset.get(id=pk).title
+            txt = request.data.get('content', '') or self.queryset.get(id=pk).content
+            self.queryset.filter(id=pk).update(title=title, content=txt, is_show=True)
+            return Response(response.HELPER_UPDATE_SUCCESS)
         except:
             return Response(response.HELPER_UPDATE_ERROR)
+
+    def add(self, request):
+        """增加文档
+
+        """
+        title = request.data.get('title', '')
+        txt = request.data.get('content', '')
+        try:
+            self.queryset.get_or_create(title=title,content=txt, is_show=False)
+            return Response(response.HELPER_ADD_SUCCESS)
+        except:
+            return Response(response.HELPER_ADD_ERROR)
+
+    def list(self, request):
+        """查询所有文档
+
+        """
+        try:
+            queryset = self.get_queryset()
+            return Response(queryset.values())
+        except Exception as e:
+            print(str(e))
+            return Response(response.HELPS_NOT_EXISTS)

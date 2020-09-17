@@ -356,3 +356,27 @@ HELPER_UPDATE_ERROR = {
     "success": False,
     "msg": "更新异常失败"
 }
+
+HELPER_ADD_ERROR = {
+    "code": "9996",
+    "success": False,
+    "msg": "创建帮助文档失败"
+}
+
+HELPS_NOT_EXISTS = {
+    "code": "9995",
+    "success": False,
+    "msg": "未发现帮助文档"
+}
+
+HELPER_ADD_SUCCESS = {
+    "code": "9994",
+    "success": True,
+    "msg": "文档添加成功"
+}
+
+HELPER_UPDATE_SUCCESS = {
+    "code": "9993",
+    "success": True,
+    "msg": "文档更新成功"
+}

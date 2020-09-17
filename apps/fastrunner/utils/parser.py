@@ -81,7 +81,7 @@ class Format(object):
                 self.__desc["files"] = body['request']['files'].pop('desc')
                 self.__desc["params"] = body['request']['params'].pop('desc')
             if 'header' in body.keys():
-                self.__desc["header"] = body['header'].pop('desc')
+                self.__desc["header"] = body.get['header'].pop('desc', {})
 
             if level is 'test':
                 self.url = body.pop('url', '')
