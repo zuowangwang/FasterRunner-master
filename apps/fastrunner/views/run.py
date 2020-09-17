@@ -259,7 +259,6 @@ def run_schedule_test(request, **kwargs):
         test_case = celery_models.PeriodicTask.objects.get(id=pk)
         run_args = json.loads(test_case.args)
         run_kwargs = json.loads(test_case.kwargs)
-        run_kwargs["strategy"] = '始终发送'
         tasks.schedule_debug_suite.delay(*run_args, **run_kwargs)
         return Response(status=status.HTTP_204_NO_CONTENT)
     except Exception as e:

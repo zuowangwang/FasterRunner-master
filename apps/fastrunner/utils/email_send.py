@@ -25,6 +25,11 @@ def control_email(sample_summary, kwargs):
         for summary in sample_summary:
             if not summary["success"]:
                 return True
+    elif kwargs["strategy"] == "仅成功发送":
+        for summary in sample_summary:
+            if not summary["success"]:
+                return False
+        return True
     elif kwargs["strategy"] == '监控邮件':
         """
             新建一个monitor.json文件

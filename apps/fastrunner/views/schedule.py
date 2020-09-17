@@ -168,7 +168,7 @@ def format_request(request_data):
         "enabled": _switch
     }
 
-    if request_data["kwargs"]["strategy"] in ['始终发送', '仅失败发送'] and request_data["kwargs"]["receiver"] == []:
+    if request_data["kwargs"]["strategy"] in ['始终发送', '仅失败发送', '仅成功发送'] and request_data["kwargs"]["receiver"] == []:
         raise exceptions.ParseError('请填写接收邮箱')
 
     crontab = celery_models.CrontabSchedule.objects.filter(**request_data["crontab"]).first()
