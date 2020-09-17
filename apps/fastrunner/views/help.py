@@ -3,21 +3,19 @@
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.decorators import method_decorator
 from rest_framework.permissions import DjangoModelPermissions
+from rest_framework.response import Response
+from rest_framework.viewsets import GenericViewSet
 
 from fastrunner import models, serializers
-from rest_framework.viewsets import GenericViewSet
-from rest_framework.response import Response
-
+from fastrunner.utils import response
 from fastrunner.utils.decorator import request_log
 from fastrunner.utils.permissions import IsBelongToProject
-from fastrunner.utils import response
 
 
 class HelperView(GenericViewSet):
     serializer_class = serializers.HelperSerializer
     permission_classes = (DjangoModelPermissions, IsBelongToProject)
     queryset = models.Helper.objects
-
 
     @method_decorator(request_log(level='INFO'))
     def single(self, request, **kwargs):
@@ -51,6 +49,7 @@ class HelperView(GenericViewSet):
         except:
             return Response(response.HELPER_UPDATE_ERROR)
 
+    @method_decorator(request_log(level='INFO'))
     def add(self, request):
         """增加文档
 
@@ -63,6 +62,7 @@ class HelperView(GenericViewSet):
         except:
             return Response(response.HELPER_ADD_ERROR)
 
+    @method_decorator(request_log(level='INFO'))
     def list(self, request):
         """查询所有文档
 
