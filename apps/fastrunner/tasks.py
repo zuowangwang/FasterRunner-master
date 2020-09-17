@@ -101,8 +101,6 @@ def schedule_debug_suite(*args, **kwargs):
             runresult = parser_runresult(sample_summary, sensitive_keys)
 
             project_name = models.Project.objects.get(id=project).name
-            # subject_name = peoject_name + ' - ' + kwargs["task_name"]
-            print(json.dumps(summary_report["stat"], indent=4))
             subject_name = "{project_name} - {task_name} - 成功 / 总接口[ {successes} / {total} ]".format(
                 project_name=project_name,
                 task_name=kwargs["task_name"],
