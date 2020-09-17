@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
+from django.core.exceptions import ObjectDoesNotExist
 from django.utils.decorators import method_decorator
 from rest_framework.permissions import DjangoModelPermissions
 
@@ -72,3 +73,25 @@ class HelperView(GenericViewSet):
         except Exception as e:
             print(str(e))
             return Response(response.HELPS_NOT_EXISTS)
+
+    @method_decorator(request_log(level='INFO'))
+    def delete(self, request, **kwargs):
+        """
+        删除一个文档： pk
+        删除多个
+        [{
+            id:int
+        }]
+        """
+
+        try:
+            if kwargs.get('pk'):  # 单个删除
+                models.Helper.objects.get(id=kwargs['pk']).delete()
+            else:
+                for nums in request.data:
+                    models.Helper.objects.get(id=nums['id']).delete()
+
+        except ObjectDoesNotExist:
+            return Response(response.HELPER_NOT_EXISTS)
+
+        return Response(response.HELPER_DEL_SUCCESS)

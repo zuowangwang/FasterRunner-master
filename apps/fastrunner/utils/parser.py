@@ -45,18 +45,18 @@ class Format(object):
         """
         try:
             self.name = body.pop('name')
-            self.__variables = body['variables'].pop('variables')
-            self.__setup_hooks = body['hooks'].pop('setup_hooks')
-            self.__teardown_hooks = body['hooks'].pop('teardown_hooks')
+            self.__variables = body.get("variables", {}).pop('variables', {})
+            self.__setup_hooks = body.get('hooks', {}).pop('setup_hooks', {})
+            self.__teardown_hooks = body.get('hooks', {}).pop('teardown_hooks', {})
             if 'header' in body.keys():
-                self.__headers = body['header'].pop('header')
+                self.__headers = body.get('header', {}).pop('header', {})
             else:
                 self.__headers = {}
             if 'request' in body.keys():
-                self.__params = body['request']['params'].pop('params')
-                self.__data = body['request']['form'].pop('data')
-                self.__json = body['request'].pop('json')
-                self.__files = body['request']['files'].pop('files')
+                self.__params = body.get('request', {}).get('params', {}).pop('params', {})
+                self.__data = body.get('request', {}).get('form', {}).pop('data', {})
+                self.__json = body.get('request', {}).pop('json', {})
+                self.__files = body.get('request', {}).get('files', {}).pop('files', {})
             else:
                 self.__params = ''
                 self.__data = ''
@@ -74,35 +74,35 @@ class Format(object):
                 self.__skipIf = False
 
             self.__desc = {
-                "variables": body['variables'].pop('desc'),
+                "variables": body.get('variables', {}).pop('desc', {}),
             }
             if 'request' in body.keys():
-                self.__desc["data"] = body['request']['form'].pop('desc')
-                self.__desc["files"] = body['request']['files'].pop('desc')
-                self.__desc["params"] = body['request']['params'].pop('desc')
+                self.__desc["data"] = body.get('request', {}).get('form', {}).pop('desc', {})
+                self.__desc["files"] = body.get('request', {}).get('files', {}).pop('desc', {})
+                self.__desc["params"] = body.get('request', {}).get('params', {}).pop('desc', {})
             if 'header' in body.keys():
-                self.__desc["header"] = body['header'].pop('desc', {})
+                self.__desc["header"] = body.get('header', {}).pop('desc', {})
 
             if level is 'test':
                 self.url = body.pop('url', '')
                 self.method = body.pop('method', '')
                 self.__times = body.pop('times', 1)
-                self.__extract = body['extract'].pop('extract')
-                self.__validate = body.pop('validate').pop('validate')
-                self.__desc['extract'] = body['extract'].pop('desc')
+                self.__extract = body.get('extract', {}).pop('extract', {})
+                self.__validate = body.pop('validate', {}).pop('validate', {})
+                self.__desc['extract'] = body.get('extract', {}).pop('desc', {})
 
             elif level is 'config':
-                self.base_url = body.pop('base_url')
-                self.__parameters = body['parameters'].pop('parameters')
-                self.__desc["parameters"] = body['parameters'].pop('desc')
-                self.__failFast = body.pop('failFast')
+                self.base_url = body.pop('base_url', "")
+                self.__parameters = body.get('parameters', {}).pop('parameters', {})
+                self.__desc["parameters"] = body['parameters'].pop('desc', {})
+                self.__failFast = body.pop('failFast', {})
                 self.__outParams = body.pop('outParams', [])
 
             self.__level = level
             self.testcase = None
 
-            self.project = body.pop('project') if 'project' in body.keys() else ''
-            self.relation = body.pop('nodeId') if 'nodeId' in body.keys() else ''
+            self.project = body.pop('project', '') if 'project' in body.keys() else ''
+            self.relation = body.pop('nodeId', '') if 'nodeId' in body.keys() else ''
 
         except KeyError:
             print(traceback.print_exc())
@@ -279,7 +279,7 @@ class Parse(object):
                         test['extract'].append({
                             "key": key,
                             "value": value,
-                            "desc": self.__desc["extract"][key]
+                            "desc": self.__desc.get("extract", {}).get(key, "")
                         })
 
             if self.__validate:
@@ -307,28 +307,28 @@ class Parse(object):
                         test["parameters"].append({
                             "key": key,
                             "value": get_type(value)[1],
-                            "desc": self.__desc["parameters"][key]
+                            "desc": self.__desc.get("parameters", {}).get(key, {})
                         })
 
         if self.__request.get('headers'):
             test["header"] = []
-            for key, value in self.__request.pop('headers').items():
+            for key, value in self.__request.pop('headers', {}).items():
                 test['header'].append({
                     "key": key,
                     "value": value,
-                    "desc": self.__desc["header"][key]
+                    "desc": self.__desc.get("header", {}).get(key, "")
                 })
 
         if self.__request.get('data'):
             test["request"]["data"] = []
-            for key, value in self.__request.pop('data').items():
+            for key, value in self.__request.pop('data', {}).items():
                 obj = get_type(value)
 
                 test['request']['data'].append({
                     "key": key,
                     "value": obj[1],
                     "type": obj[0],
-                    "desc": self.__desc["data"][key]
+                    "desc": self.__desc.get("data", {}).get(key, "")
                 })
 
         # if self.__request.get('files'):
@@ -344,20 +344,20 @@ class Parse(object):
 
         if self.__request.get('params'):
             test["request"]["params"] = []
-            for key, value in self.__request.pop('params').items():
+            for key, value in self.__request.pop('params', {}).items():
                 test['request']['params'].append({
                     "key": key,
                     "value": value,
                     "type": 1,
-                    "desc": self.__desc["params"][key]
+                    "desc": self.__desc.get("params", {}).get(key, "")
                 })
 
         if self.__request.get('json'):
             test["request"]["json_data"] = \
-                json.dumps(self.__request.pop("json"), indent=4,
+                json.dumps(self.__request.pop("json", {}), indent=4,
                            separators=(',', ': '), ensure_ascii=False)
         if self.__variables:
-            test["variables"] = parser_variables(self.__variables, self.__desc["variables"])
+            test["variables"] = parser_variables(self.__variables, self.__desc.get("variables", {}))
 
         if self.__setup_hooks or self.__teardown_hooks:
             test["hooks"] = []

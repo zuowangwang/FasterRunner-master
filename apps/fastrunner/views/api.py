@@ -87,7 +87,7 @@ class APITemplateView(GenericViewSet):
             }
             apis.append(models.API(**api_body))
         try:
-            models.API.objects.bulk_create(apis)
+            ret = models.API.objects.bulk_create(apis)
         except DataError:
             return Response(response.DATA_TO_LONG)
         except Exception as e:

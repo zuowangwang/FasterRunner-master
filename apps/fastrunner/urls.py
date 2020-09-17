@@ -113,6 +113,7 @@ urlpatterns = [
     path('help_menu/<int:pk>/', help.HelperView.as_view({
         "get": "single",
         "patch": "update",
+        "delete": "delete"
     })),
 
     path('help_menu/', help.HelperView.as_view({

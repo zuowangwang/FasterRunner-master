@@ -380,3 +380,9 @@ HELPER_UPDATE_SUCCESS = {
     "success": True,
     "msg": "文档更新成功"
 }
+
+HELPER_DEL_SUCCESS = {
+    "code": "9992",
+    "success": True,
+    "msg": "指定文档删除成功"
+}
