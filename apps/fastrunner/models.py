@@ -291,6 +291,6 @@ class Helper(BaseTable):
         verbose_name = "帮助文档"
         verbose_name_plural = verbose_name
 
-    title = models.CharField(max_length=255, null=True, blank=True, verbose_name="标题")
+    title = models.CharField(max_length=255, verbose_name="标题")
     content = models.TextField(verbose_name="内容", null=True, blank=True,)
     is_show = models.BooleanField(default=False, verbose_name="是否展示")
