@@ -101,13 +101,11 @@ def schedule_debug_suite(*args, **kwargs):
             runresult = parser_runresult(sample_summary, sensitive_keys)
 
             project_name = models.Project.objects.get(id=project).name
-            # subject_name = peoject_name + ' - ' + kwargs["task_name"]
-            print(json.dumps(summary_report["stat"], indent=4))
             subject_name = "{project_name} - {task_name} - 接口总数:{total}/ 成功率:{successes:.2f}%".format(
                 project_name=project_name,
                 task_name=kwargs["task_name"],
-                total= summary_report["stat"]["testsRun"],
-                successes = int(summary_report["stat"]["successes"])/int(summary_report["stat"]["testsRun"])
+                total=summary_report["stat"]["testsRun"],
+                successes=(int(summary_report["stat"]["successes"]) / int(summary_report["stat"]["testsRun"])) * 100
             )
             if runresult["fail_task"] > 0:
                 subject_name += " - 失败：" + ",".join([err_msg["proj"] for err_msg in runresult["error_list"]])
