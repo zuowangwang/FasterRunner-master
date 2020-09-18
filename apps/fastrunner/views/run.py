@@ -12,9 +12,9 @@ from fastrunner.utils.decorator import request_log
 from fastrunner.utils.host import parse_host
 from fastrunner.utils.parser import Format
 from fastrunner.utils import loader
-from fastrunner.utils.variable_operat import add_global_variable, get_para
 from fastrunner.utils.permissions import IsBelongToProject
 from fastrunner import models
+from fastrunner.utils import response
 
 """运行方式
 """
@@ -84,7 +84,10 @@ def run_api_pk(request, **kwargs):
     """run api by pk and config
     """
     host = request.query_params["host"]
-    api = models.API.objects.get(id=kwargs['pk'])
+    try:
+        api = models.API.objects.get(id=kwargs['pk'])
+    except:
+        return Response(response.API_NOT_FOUND)
     name = request.query_params["config"]
     config = None if name == '请选择' else eval(models.Config.objects.get(name=name, project=api.project).body)
     test_case = eval(api.body)
