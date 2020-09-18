@@ -39,7 +39,7 @@ class ProjectView(ModelViewSet):
         if self.request.user.is_superuser:
             return models.Project.objects.annotate(count=Count("api")).all().order_by('-create_time')
         project_id_list = UserModel.objects.filter(id=self.request.user.id).values_list('belong_project', flat=True)
-        return models.Project.objects.filter(id__in=[_ for _ in project_id_list]).order_by('-update_time')
+        return models.Project.objects.filter(id__in=[_ for _ in project_id_list]).annotate(count=Count("api")).all().order_by('-update_time')
 
     @method_decorator(request_log(level='INFO'))
     def single(self, request, **kwargs):
