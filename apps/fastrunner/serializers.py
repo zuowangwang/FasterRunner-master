@@ -232,6 +232,17 @@ class FileSerializer(serializers.ModelSerializer):
         model = models.ModelWithFileField
         fields = '__all__'
 
+class APITemplateFileSerializer(serializers.ModelSerializer):
+    """
+    文件信息序列化
+    """
+    file = serializers.FileField(required=True, write_only=True, allow_empty_file=False, use_url='api_templates', label="文件",
+                                 help_text="文件", error_messages={"blank": "请上传文件", "required": "请上传文件"})
+
+    class Meta:
+        model = models.APITemplateFile
+        fields = '__all__'
+
 
 class PycodeSerializer(serializers.ModelSerializer):
     """

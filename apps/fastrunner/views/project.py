@@ -226,18 +226,28 @@ class FileView(GenericViewSet, mixins.CreateModelMixin, mixins.ListModelMixin, m
     create:上传与更新文件
     destroy:删除文件
     """
-    serializer_class = serializers.FileSerializer
     pagination_class = pagination.MyPageNumberPagination
     permission_classes = (DjangoModelPermissions, IsBelongToProject)
 
+    def get_serializer_class(self):
+        if self.request.data.get('type') == "api":
+            return serializers.APITemplateFileSerializer
+        else:
+            return serializers.FileSerializer
+
     def get_queryset(self):
+        if self.request.data.get("type") == "api":
+            obj = models.APITemplateFile.objects
+        else:
+            obj = models.ModelWithFileField.objects
+
         if self.action == 'create':
             project = self.request.data['project']
             name = self.request.data['name']
-            return models.ModelWithFileField.objects.filter(project__id=project, name=name).order_by('-update_time')
+            return obj.filter(project__id=project, name=name).order_by('-update_time')
         else:
             project = self.request.query_params['project']
-            queryset = models.ModelWithFileField.objects.filter(project__id=project).order_by('-update_time')
+            queryset = obj.filter(project__id=project).order_by('-update_time')
             if self.action == 'list':
                 node = self.request.query_params.get('node', '')
                 search = self.request.query_params.get('search', '')
@@ -302,14 +312,18 @@ class FileView(GenericViewSet, mixins.CreateModelMixin, mixins.ListModelMixin, m
     def perform_create(self, serializer):
         serializer.save()
         try:
-            excel_file = models.ModelWithFileField.objects.get(id=serializer.data["id"])
-            file_path = os.path.join(MEDIA_ROOT, str(excel_file.file))
-            excel_info = xlrd.open_workbook(file_path)
-            excel_tree = {"value": excel_file.name, "label": excel_file.name, "children": []}
-            for sheet in excel_info.sheets():
-                excel_tree["children"].append({"value": sheet.name, "label": sheet.name})
-            excel_file.excel_tree = excel_tree
-            excel_file.save()
+            if self.request.data.get('type') == "api":
+                excel_file = models.APITemplateFile.objects.get(id=serializer.data["id"])
+                excel_file.save()
+            else:
+                excel_file = models.ModelWithFileField.objects.get(id=serializer.data["id"])
+                file_path = os.path.join(MEDIA_ROOT, str(excel_file.file))
+                excel_info = xlrd.open_workbook(file_path)
+                excel_tree = {"value": excel_file.name, "label": excel_file.name, "children": []}
+                for sheet in excel_info.sheets():
+                    excel_tree["children"].append({"value": sheet.name, "label": sheet.name})
+                excel_file.excel_tree = excel_tree
+                excel_file.save()
         except XLRDError as e:
             pass
 
