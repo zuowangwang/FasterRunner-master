@@ -1,4 +1,6 @@
+from markdown import markdown
 from django.db import models
+from django.utils.html import mark_safe
 
 
 class BaseTable(models.Model):
@@ -285,6 +287,7 @@ class Helper(BaseTable):
     帮助信息
     """
     class Meta:
+        ordering = ['update_time']
         verbose_name = "帮助信息"
         verbose_name_plural = verbose_name
 

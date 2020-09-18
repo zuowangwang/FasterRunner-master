@@ -11,6 +11,7 @@ from fastrunner.utils import response
 from fastrunner.utils.decorator import request_log
 from fastrunner.utils.permissions import IsBelongToProject
 
+from markdown import markdown
 
 class HelperView(GenericViewSet):
     serializer_class = serializers.HelperSerializer
@@ -44,7 +45,7 @@ class HelperView(GenericViewSet):
         try:
             title = request.data.get('title', '') or self.queryset.get(id=pk).title
             txt = request.data.get('content', '') or self.queryset.get(id=pk).content
-            self.queryset.filter(id=pk).update(title=title, content=txt, is_show=True)
+            self.queryset.filter(id=pk).update(title=markdown(title), content=markdown(txt), is_show=True)
             return Response(response.HELPER_UPDATE_SUCCESS)
         except:
             return Response(response.HELPER_UPDATE_ERROR)
@@ -54,10 +55,10 @@ class HelperView(GenericViewSet):
         """增加文档
 
         """
-        title = request.data.get('title', '')
-        txt = request.data.get('content', '')
+        title = markdown(request.data.get('title', ''))
+        txt = markdown(request.data.get('content', ''))
         try:
-            self.queryset.get_or_create(title=title,content=txt, is_show=False)
+            self.queryset.get_or_create(title=title, content=txt, is_show=False)
             return Response(response.HELPER_ADD_SUCCESS)
         except:
             return Response(response.HELPER_ADD_ERROR)
