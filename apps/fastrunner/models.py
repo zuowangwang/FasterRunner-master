@@ -288,9 +288,9 @@ class Helper(BaseTable):
     """
     class Meta:
         ordering = ['update_time']
-        verbose_name = "帮助信息"
+        verbose_name = "帮助文档"
         verbose_name_plural = verbose_name
 
-    title = models.CharField(max_length=255, null=False, verbose_name="标题")
-    content = models.TextField(verbose_name="内容")
-    is_show = models.BooleanField(default=False)
+    title = models.CharField(max_length=255, null=True, blank=True, verbose_name="标题")
+    content = models.TextField(verbose_name="内容", null=True, blank=True,)
+    is_show = models.BooleanField(default=False, verbose_name="是否展示")

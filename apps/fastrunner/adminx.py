@@ -2,7 +2,7 @@
 import xadmin
 from xadmin import views
 
-from .models import Project, Config, API, Case, CaseStep, HostIP, Variables, Report, ModelWithFileField, Pycode
+from .models import Project, Config, API, Case, CaseStep, HostIP, Variables, Report, ModelWithFileField, Pycode, APITemplateFile, Helper
 from djcelery.models import TaskState, WorkerState, PeriodicTask, IntervalSchedule, CrontabSchedule, TaskMeta
 
 
@@ -85,6 +85,19 @@ class PycodeAdmin(object):
     list_filter = ['name', 'code', 'desc', 'project', 'create_time', 'update_time']
     ordering = ['-update_time']
 
+class APITemplateFileAdmin(object):
+    list_display = ['id', 'name', 'file', 'relation', 'project', 'create_time', 'update_time']
+    list_display_links = ['id', 'name']
+    search_fields = ['name', 'project__name']
+    list_filter = ['name', 'project', 'create_time', 'update_time']
+    ordering = ['-update_time']
+
+class HelperAdmin(object):
+    list_display = ['id', 'title', 'content', 'is_show', 'create_time', 'update_time']
+    list_display_links = ['title', 'content']
+    search_fields = ['title', 'is_show']
+    list_filter = ['title', 'is_show', 'create_time', 'update_time']
+    ordering = ['-update_time']
 
 # 全局配置
 # xadmin.site.register(views.BaseAdminView, BaseSetting) #因为配置域名的关系访问不到远程库，所以不使用多主题功能
@@ -107,3 +120,5 @@ xadmin.site.register(Variables, VariablesAdmin)
 xadmin.site.register(Report, ReportAdmin)
 xadmin.site.register(ModelWithFileField, ModelWithFileFieldAdmin)
 xadmin.site.register(Pycode, PycodeAdmin)
+xadmin.site.register(APITemplateFile, APITemplateFileAdmin)
+xadmin.site.register(Helper, HelperAdmin)
