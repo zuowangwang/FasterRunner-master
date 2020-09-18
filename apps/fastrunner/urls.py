@@ -119,5 +119,6 @@ urlpatterns = [
     path('help_menu/', help.HelperView.as_view({
         "get": "list",
         "post": "add",
+        "delete": "delete"
     })),
 ]
