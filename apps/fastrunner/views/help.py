@@ -11,7 +11,6 @@ from fastrunner.utils import response
 from fastrunner.utils.decorator import request_log
 from fastrunner.utils.permissions import IsBelongToProject
 
-from markdown import markdown
 
 class HelperView(GenericViewSet):
     serializer_class = serializers.HelperSerializer
@@ -45,7 +44,8 @@ class HelperView(GenericViewSet):
         try:
             title = request.data.get('title', '') or self.queryset.get(id=pk).title
             txt = request.data.get('content', '') or self.queryset.get(id=pk).content
-            self.queryset.filter(id=pk).update(title=markdown(title), content=markdown(txt), is_show=True)
+            is_show = request.data.get('is_show') or self.queryset.get(id=pk).is_show
+            self.queryset.filter(id=pk).update(title=title, content=txt, is_show=is_show)
             return Response(response.HELPER_UPDATE_SUCCESS)
         except:
             return Response(response.HELPER_UPDATE_ERROR)
@@ -55,10 +55,11 @@ class HelperView(GenericViewSet):
         """增加文档
 
         """
-        title = markdown(request.data.get('title', ''))
-        txt = markdown(request.data.get('content', ''))
+        title = request.data.get('title', '')
+        txt = request.data.get('content', '')
+        is_show = request.data.get('is_show') or True
         try:
-            self.queryset.get_or_create(title=title, content=txt, is_show=False)
+            self.queryset.get_or_create(title=title, content=txt, is_show=is_show)
             return Response(response.HELPER_ADD_SUCCESS)
         except:
             return Response(response.HELPER_ADD_ERROR)
@@ -68,9 +69,14 @@ class HelperView(GenericViewSet):
         """查询所有文档
 
         """
+        is_show = request.query_params.get("show")
         try:
-            queryset = self.get_queryset()
-            return Response(queryset.values())
+            if is_show == "1":
+                return Response(self.queryset.filter(is_show=True).values())
+            elif is_show == "0":
+                return Response(self.queryset.filter(is_show=False).values())
+            else:
+                return Response(self.queryset.values())
         except Exception as e:
             print(str(e))
             return Response(response.HELPS_NOT_EXISTS)
