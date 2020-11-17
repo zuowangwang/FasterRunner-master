@@ -13,16 +13,17 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-
-from django.urls import path, include
 from django.conf.urls import url
+from django.contrib import admin
+from django.urls import path, include
 from django.views.static import serve
 from rest_framework.authtoken import views
 from rest_framework_jwt.views import obtain_jwt_token
-import xadmin
-from FasterRunner.settings import MEDIA_ROOT, STATICFILES_DIRS
+
+from FasterRunner.settings import MEDIA_ROOT
 
 urlpatterns = [
+    path(r'admin/', admin.site.urls),
     url(r'^api/rtf-auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^media/(?P<path>.*)$', serve, {"document_root": MEDIA_ROOT}),
     # url(r'^static/(?P<path>.*)$',  serve, {"document_root": STATICFILES_DIRS}),
@@ -30,7 +31,5 @@ urlpatterns = [
     url(r'^api-token-auth/', views.obtain_auth_token),
     # jwt的认证接口
     url(r'^api/user/login/', obtain_jwt_token),
-
-    url(r'^api/xadmin/', xadmin.site.urls),
     path('api/fastrunner/', include('fastrunner.urls'))
 ]

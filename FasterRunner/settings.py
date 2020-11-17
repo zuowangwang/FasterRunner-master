@@ -10,11 +10,13 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.1/ref/settings/
 """
 
-import os
-import sys
-import djcelery
 import configparser
 import datetime
+import os
+import sys
+from collections import OrderedDict
+
+import djcelery
 
 # *******configThis******** get form config.conf 快速切换环境
 env = 'dev'
@@ -63,6 +65,7 @@ MEDIA_URL = "/media/"
 # Application definition
 
 INSTALLED_APPS = [
+    'simpleui',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -74,11 +77,13 @@ INSTALLED_APPS = [
     'corsheaders',
     'djcelery',
     'rest_framework.authtoken',
-    'xadmin',
+    # 'xadmin',
     'crispy_forms',
-    'DjangoUeditor',
+    # 'DjangoUeditor',
     'reversion',
-    'users'
+    'users',
+    'constance',
+    'constance.backends.database'
 ]
 
 MIDDLEWARE = [
@@ -318,3 +323,33 @@ LOGGING = {
         }
     }
 }
+
+# Constance 常量控制
+CONSTANCE_BACKEND = 'constance.backends.database.DatabaseBackend'
+CONSTANCE_IGNORE_ADMIN_VERSION_CHECK = True
+
+# CONSTANCE_CONFIG = OrderedDict({
+#     'URL': ('http://10.51.96.118:8080/fastrunner/project_list', '测试平台主页')
+# })
+
+# 在导入数据时使用数据库事务，默认False
+IMPORT_EXPORT_USE_TRANSACTIONS = True
+# 关闭LOADING
+SIMPLEUI_LOADING = True
+# 加载本地静态资源
+SIMPLEUI_STATIC_OFFLINE = True
+# 不收集分析信息
+SIMPLEUI_ANALYSIS = False
+# 是否隐藏首页最近动作
+SIMPLEUI_HOME_ACTION = True
+# 快速操作
+SIMPLEUI_HOME_QUICK = True
+# 服务器信息
+SIMPLEUI_HOME_INFO = False
+# 顶部首页跳转地址
+SIMPLEUI_INDEX = "http://10.51.96.118:8080/fastrunner/project_list"
+# 自定义SIMPLEUI的Logo
+SIMPLEUI_LOGO = "http://47.113.120.14:8080/static/admin/simpleui-x/img/logo.png"
+
+SIMPLEUI_DEFAULT_ICON = False
+
