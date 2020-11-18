@@ -77,9 +77,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'djcelery',
     'rest_framework.authtoken',
-    # 'xadmin',
     'crispy_forms',
-    # 'DjangoUeditor',
     'reversion',
     'users',
     'constance',
@@ -328,9 +326,10 @@ LOGGING = {
 CONSTANCE_BACKEND = 'constance.backends.database.DatabaseBackend'
 CONSTANCE_IGNORE_ADMIN_VERSION_CHECK = True
 
-# CONSTANCE_CONFIG = OrderedDict({
-#     'URL': ('http://10.51.96.118:8080/fastrunner/project_list', '测试平台主页')
-# })
+CONSTANCE_CONFIG = OrderedDict({
+    'retention_time': (30, '保留报告时间(单位天)', int),
+    'del_mysql_backup': (30, '保留数据库备份时间(单位天)', int),
+})
 
 # 在导入数据时使用数据库事务，默认False
 IMPORT_EXPORT_USE_TRANSACTIONS = True

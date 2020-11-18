@@ -50,7 +50,7 @@ class VariablesAdmin(CommonSettingAdmin):
 
 class ReportAdmin(CommonSettingAdmin):
     list_display = [obj.name for obj in Report._meta.fields]
-
+    list_filter = ['project', 'type']
 
 class ReportDetailAdmin(CommonSettingAdmin):
     list_display = [obj.name for obj in ReportDetail._meta.fields]

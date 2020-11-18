@@ -1,15 +1,22 @@
 # _*_ coding: utf-8 _*_
-import django
-django.setup()
-
+import datetime
 import json
+import os
+import time
 
+import django
 from celery import shared_task  # 可以无需任何具体的应用程序实例创建任务
+from constance import config
 
+from FasterRunner import settings
 from fastrunner import models
-from fastrunner.utils.loader import save_summary, debug_suite, debug_api
+from fastrunner.utils.common import string2time_stamp
+from fastrunner.utils.email_send import send_result_email, prepare_email_content, control_email, parser_runresult, \
+    prepare_email_file, get_summary_report
 from fastrunner.utils.host import parse_host
-from fastrunner.utils.email_send import send_result_email, prepare_email_content, control_email, parser_runresult, prepare_email_file, get_summary_report
+from fastrunner.utils.loader import save_summary, debug_suite, debug_api
+
+django.setup()
 
 
 @shared_task
@@ -113,8 +120,60 @@ def schedule_debug_suite(*args, **kwargs):
                 subject_name += " - 成功！"
             html_conetnt = prepare_email_content(runresult, subject_name)
             send_file_path = prepare_email_file(summary_report)
-            send_status = send_result_email(subject_name, kwargs["receiver"], kwargs["mail_cc"], send_html_content=html_conetnt, send_file_path=send_file_path)
+            send_status = send_result_email(subject_name, kwargs["receiver"], kwargs["mail_cc"],
+                                            send_html_content=html_conetnt, send_file_path=send_file_path)
             if send_status:
                 print('邮件发送成功')
             else:
                 print('邮件发送失败')
+
+
+@shared_task
+def del_report():
+    """定时删除报告
+
+    interval (int): 保留报告的时间，单位/天.
+    """
+    expiration_date = datetime.datetime.now() - datetime.timedelta(days=config.retention_time)
+    models.Report.objects.filter(create_time__lte=expiration_date).delete()
+
+
+@shared_task
+def database_backup():
+    """备份数据库
+
+    """
+    date = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+    sql_name = settings.database_name + "_" + date + '.sql'
+    mysql_dirname = os.path.join(settings.BASE_DIR, 'data', 'mysql_backup')
+    if not os.path.exists(mysql_dirname):
+        os.makedirs(mysql_dirname)
+    dest = os.path.join(mysql_dirname, sql_name)
+    os.system('mysqldump -u{username} -p{password} {datebase} > {dest}'.format(
+        username=settings.database_user,
+        password=settings.database_password,
+        datebase=settings.database_name,
+        dest=dest,
+    ))
+
+
+@shared_task
+def del_database_backup():
+    """定时删除备份的数据库sql文件
+
+    """
+    now = time.time()
+    interval = config.del_mysql_backup * 24 * 60 * 60
+    mysql_dirname = os.path.join(settings.BASE_DIR, 'data', 'mysql_backup')
+    if not os.path.exists(mysql_dirname):
+        return
+    sql_list = os.listdir(mysql_dirname)
+    need_del = []
+    for name in sql_list:
+        time_str = name.split('_', maxsplit=1)[-1].split('.')[0]
+        time_stamp = string2time_stamp(time_str)
+        if now - time_stamp >= interval:
+            need_del.append(os.path.normpath(os.path.join(mysql_dirname, name)))
+
+    for path in need_del:
+        os.remove(path)
