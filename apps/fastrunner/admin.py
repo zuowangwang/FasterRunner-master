@@ -29,7 +29,7 @@ class ConfigAdmin(CommonSettingAdmin):
 class APIAdmin(CommonSettingAdmin):
     list_display = [obj.name for obj in API._meta.fields]
     search_fields = ['name']
-    list_filter = ['relation']
+    list_filter = ['project', 'relation']
 
 
 class CaseAdmin(CommonSettingAdmin):

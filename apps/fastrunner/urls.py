@@ -14,8 +14,8 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 
-from django.urls import path
 from django.conf.urls import url, include
+from django.urls import path
 from rest_framework.routers import DefaultRouter
 
 from fastrunner.views import project, api, config, schedule, run, suite, report, download, taskmeta, lock_files, help
@@ -47,7 +47,10 @@ router.register(r'taskmeta', taskmeta.TaskMetaView, base_name='taskmeta')
 urlpatterns = [
     url(r'^', include(router.urls)),
     # 文件下载接口
-    url('download/', download.DownloadView.as_view()),
+    path('download/', download.DownloadView.as_view({
+        "post": "post",
+        "put": "put"
+    })),
     # dashboard
     path('project/<int:pk>/', project.ProjectView.as_view({"get": "single"})),
 
@@ -57,7 +60,7 @@ urlpatterns = [
 
     # 二叉树接口地址
     path('tree/<int:pk>/', project.TreeView.as_view({
-        'get':'get',
+        'get': 'get',
         'patch': 'patch'
     })),
 
