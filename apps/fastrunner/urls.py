@@ -64,7 +64,8 @@ urlpatterns = [
     # api接口模板地址
     path('api/', api.APITemplateView.as_view({
         "post": "add",
-        "get": "list"
+        "get": "list",
+        "put": "move",
     })),
 
     path('api/<int:pk>/', api.APITemplateView.as_view({
