@@ -4,9 +4,6 @@ import time
 import xlwt
 from io import BytesIO
 
-import pandas as pd
-
-from FasterRunner import settings
 from FasterRunner.settings import MEDIA_ROOT
 
 
@@ -145,21 +142,10 @@ def get_error_response_content(summary_details):
     return content, out_keys
 
 
-# def write_api_excel():
-#     now = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
-#     api_dirname = os.path.join(settings.BASE_DIR, 'media', 'api_excel')
-#     header = ['name', 'method', 'url', 'header', 'times', 'json', 'form',
-#            'params', 'files', 'extract', 'validate', 'variables', 'setup_hooks', 'teardown_hooks']
-#     if not os.path.exists(api_dirname):
-#         os.makedirs(api_dirname)
-#     api_path = os.path.join(api_dirname, now + '.xls')
-#     df = pd.DataFrame.to_excel(
-#         excel_writer=api_path,
-#         sheet_name='API',
-#         header=header
-#     )
-
 def export_apis(data_list):
+    """批量导出api到Excel文件
+
+    """
     ws = xlwt.Workbook(encoding='utf-8')
     w = ws.add_sheet("API")
     custom_header = [
