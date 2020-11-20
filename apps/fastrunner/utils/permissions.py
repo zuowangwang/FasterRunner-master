@@ -30,3 +30,15 @@ def _check_is_locked(project_id, lock_type, file_id):
     lock_queryset = LockFiles.objects.filter(project_id=project_id, lock_type=lock_type, file_id=file_id)
     if lock_queryset:
         raise exceptions.NotAcceptable(detail='该文件被已被锁定，无法更新或删除')
+
+
+class OnlyAllowSuperUser(permissions.BasePermission):
+    """Only super administrators can access it.
+
+    """
+    def has_permission(self, request, view):
+        if request.user.is_superuser:
+            return True
+        if request.method == "GET":
+            return True
+        return False
