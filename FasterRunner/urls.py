@@ -19,7 +19,6 @@ from django.conf.urls import url
 from django.views.static import serve
 from rest_framework.authtoken import views
 from rest_framework_jwt.views import obtain_jwt_token
-import xadmin
 from FasterRunner.settings import MEDIA_ROOT, STATICFILES_DIRS
 
 urlpatterns = [
