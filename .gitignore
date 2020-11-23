@@ -16,3 +16,4 @@ tempWorkDir/*.*
 *.egg-info
 /celerybeat.pid
 /tempWorkDir/
+/data/
