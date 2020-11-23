@@ -255,9 +255,11 @@ pm2 list
 
 6. 重启服务命令
 pm2 restart fasterweb
+```
 
+**windows 本地开发**
 
-7.windows 本地开发
+```
 数据库启动：           net start mysql                       （管理员cmd输入启动）
 MQ服务异步启动： RabbitMQ Service - start  （启动栏管理员右键启动）
 node启动：          npm run dev  前端服务
