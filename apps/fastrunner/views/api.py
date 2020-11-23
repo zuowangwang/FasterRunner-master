@@ -48,15 +48,16 @@ class APITemplateView(GenericViewSet):
 
     @method_decorator(request_log(level='INFO'))
     def add(self, request):
+        """添加或更新一个或多个接口
+
         """
-        新增一个接口
-        """
-        apis = []
+        add_apis = []
         if request.data.get("bulk_add"):
             project_id = int(request.data.get("project"))
             node_id = int(request.data.get("nodeId"))
             temps = request.data.get("interfaces", {})
             for temp in temps.values():
+                id = temp.get('id', 0)
                 temp.update({
                     "project": project_id,
                     "nodeId": node_id
@@ -72,7 +73,11 @@ class APITemplateView(GenericViewSet):
                     'project': models.Project.objects.get(id=api.project),
                     'relation': api.relation
                 }
-                apis.append(models.API(**api_body))
+                obj = models.API.objects.filter(id=id)
+                if obj:
+                    obj.update(**api_body)
+                else:
+                    add_apis.append(models.API(**api_body))
         else:
             api = Format(request.data)
             api.parse()
@@ -85,9 +90,10 @@ class APITemplateView(GenericViewSet):
                 'project': models.Project.objects.get(id=api.project),
                 'relation': api.relation
             }
-            apis.append(models.API(**api_body))
+            add_apis.append(models.API(**api_body))
         try:
-            ret = models.API.objects.bulk_create(apis)
+            if len(add_apis):
+                models.API.objects.bulk_create(add_apis)
         except DataError:
             return Response(response.DATA_TO_LONG)
         except Exception as e:
@@ -136,6 +142,32 @@ class APITemplateView(GenericViewSet):
         api.name = name
         api.save()
         return Response(response.API_ADD_SUCCESS)
+
+    @method_decorator(request_log(level='INFO'))
+    def move(self, request, **kwargs):
+        """移动接口到新的node
+
+        """
+        relation_id = request.data.get('relation')
+        ids = request.data.get('ids', [])
+        success, failure = [], []
+        for id in ids:
+            try:
+                api = models.API.objects.get(id=id)
+                api.relation = int(relation_id)
+                api.save()
+                success.append(id)
+            except:
+                failure.append(id)
+        result = {
+            'relation': relation_id,
+            "success": success,
+            'failure': failure
+        }
+        ret = response.API_MOVE_SUCCESS
+        ret.update(result=result)
+        return Response(ret)
+
 
     @method_decorator(request_log(level='INFO'))
     def delete(self, request, **kwargs):

@@ -5,16 +5,17 @@ from django.utils.decorators import method_decorator
 from rest_framework.permissions import DjangoModelPermissions
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
+from rest_framework.decorators import permission_classes
 
 from fastrunner import models, serializers
 from fastrunner.utils import response
 from fastrunner.utils.decorator import request_log
-from fastrunner.utils.permissions import IsBelongToProject
+from fastrunner.utils.permissions import IsBelongToProject, OnlyAllowSuperUser
 
 
 class HelperView(GenericViewSet):
     serializer_class = serializers.HelperSerializer
-    permission_classes = (DjangoModelPermissions, IsBelongToProject)
+    permission_classes = (DjangoModelPermissions, IsBelongToProject, OnlyAllowSuperUser)
     queryset = models.Helper.objects
 
     @method_decorator(request_log(level='INFO'))

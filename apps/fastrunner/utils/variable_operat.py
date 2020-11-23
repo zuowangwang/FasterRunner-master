@@ -30,7 +30,11 @@ def get_para(val, text):
 
     """
     content = text if isinstance(text, dict) else json.loads(text)
-    keys = val.split(".")[1:]
+    if val.startswith('content'):
+        word = val.split(".")[1:]
+    else:
+        word = val.split(".")
+    keys = word if word else [val]
     value = get_value(content, keys)
     return value
 

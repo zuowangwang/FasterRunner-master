@@ -100,6 +100,12 @@ API_UPDATE_SUCCESS = {
     'msg': 'API更新成功'
 }
 
+API_MOVE_SUCCESS = {
+    'code': '0044',
+    'result': '',
+    'msg': 'API更新成功'
+}
+
 SUITE_ADD_SUCCESS = {
     'code': '0051',
     'success': True,
