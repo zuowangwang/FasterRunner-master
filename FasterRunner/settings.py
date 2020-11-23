@@ -272,8 +272,8 @@ LOGGING = {
             'level': 'DEBUG',
             'class': 'logging.handlers.RotatingFileHandler',
             'filename': os.path.join(BASE_DIR, 'logs/debug.log'),
-            'maxBytes': 1073741824,
-            'backupCount': 5,
+            'maxBytes': 10485760,
+            'backupCount': 10,
             'formatter': 'standard',
         },
         'console': {
@@ -285,16 +285,16 @@ LOGGING = {
             'level': 'INFO',
             'class': 'logging.handlers.RotatingFileHandler',
             'filename': os.path.join(BASE_DIR, 'logs/run.log'),
-            'maxBytes': 1073741824,
-            'backupCount': 5,
+            'maxBytes': 10485760,
+            'backupCount': 10,
             'formatter': 'standard',
         },
         'scprits_handler': {
             'level': 'INFO',
             'class': 'logging.handlers.RotatingFileHandler',
             'filename': os.path.join(BASE_DIR, 'logs/run.log'),
-            'maxBytes': 1073741824,
-            'backupCount': 5,
+            'maxBytes': 10485760,
+            'backupCount': 10,
             'formatter': 'standard',
         },
     },
@@ -348,7 +348,7 @@ SIMPLEUI_HOME_INFO = False
 # 顶部首页跳转地址
 SIMPLEUI_INDEX = "http://10.51.96.118:8080/fastrunner/project_list"
 # 自定义SIMPLEUI的Logo
-SIMPLEUI_LOGO = "http://47.113.120.14:8080/static/admin/simpleui-x/img/logo.png"
+# SIMPLEUI_LOGO = "http://47.113.120.14:8080/static/admin/simpleui-x/img/logo.png"
 
 SIMPLEUI_DEFAULT_ICON = False
 

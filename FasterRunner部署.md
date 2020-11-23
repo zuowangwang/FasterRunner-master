@@ -52,11 +52,11 @@ DATABASES = {
 }
 
 3. 生成迁移表
-python3 manage.py makemigrations  
+python manage.py makemigrations  
 4. 执行迁移数据
-python3 manage.py migrate 
+python manage.py migrate 
 5. 按提示创建一个超级用户
-python3 manage.py createsuperuser
+python manage.py createsuperuser
 
 6. FasterRunner 的后台静态文件
 cp -r /opt/FasterRunner-master/static/xadmin /opt/FasterRunner-master/static/
@@ -266,5 +266,5 @@ node启动：          npm run dev  前端服务
 日志监控启动：     python manage.py celery beat -l info  > ./logs/worker.log
 ```
 
-**访问：http://10.51.96.118:8080/fastrunner/login**
+**访问：http://10.51.96.118:8080/fastrunner/login  localhost:8000/admin**
 
