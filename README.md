@@ -257,6 +257,38 @@ pm2 list
 pm2 restart fasterweb
 ```
 
+
+**定时任务，删除报告与数据库备份**
+```
+Constance 页面设置保留天数
+
+后台：Periodic tasks页面设置执行时间任务
+
+配置三个字段（名称，Task (registered)，Interval）
+fastrunner.tasks.del_report   定时删除报告
+fastrunner.tasks.del_database_backup  定时删除数据费备份
+fastrunner.tasks.database_backup   定时备份数据库
+```
+
+
+**其他问题收集**
+```
+后台静态资源问题：
+
+ settings.py文件中176行添加：
+ STATIC_ROOT = os.path.join(BASE_DIR，"static")
+
+ 对应：nginx.conf文件中20行
+ location /static {
+        alias /opt/workspace/FasterRunner/static; # your Django project's static files - amend as required
+    }
+ 执行： python3 manage.py collectstatic
+
+ 然后注释settings.py文件中176行
+
+```
+
+
 **windows 本地开发**
 
 ```
