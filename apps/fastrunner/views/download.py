@@ -76,7 +76,7 @@ class DownloadView(GenericViewSet):
             name = body.get('name', '')
             method = body.get('method')
             url = body.get('url', "")
-            header = body.get('headers', {})
+            header = {'header': body.get('headers', {})}
             times = body.get("times", "1")
             json_data = body.get("json", {})
             form = {
@@ -100,6 +100,7 @@ class DownloadView(GenericViewSet):
             }
             variables = {
                 "variables": body.get('variables', []),
+                "desc": desc.get('variables', {})
             }
             setup_hooks = body.get('setup_hooks', [])
             teardown_hooks = body.get('teardown_hooks', [])
