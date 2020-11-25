@@ -76,7 +76,7 @@ class DownloadView(GenericViewSet):
             name = body.get('name', '')
             method = body.get('method')
             url = body.get('url', "")
-            header = body.get('headers', {})
+            header = {'header': body.get('headers', {})}
             times = body.get("times", "1")
             json_data = body.get("json", {})
             form = {
