@@ -100,6 +100,7 @@ class DownloadView(GenericViewSet):
             }
             variables = {
                 "variables": body.get('variables', []),
+                "desc": desc.get('variables', {})
             }
             setup_hooks = body.get('setup_hooks', [])
             teardown_hooks = body.get('teardown_hooks', [])

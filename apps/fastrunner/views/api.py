@@ -73,7 +73,7 @@ class APITemplateView(GenericViewSet):
                     'project': models.Project.objects.get(id=api.project),
                     'relation': api.relation
                 }
-                obj = models.API.objects.filter(id=id)
+                obj = models.API.objects.filter(id=id, relation=node_id, project=project_id)
                 if obj:
                     obj.update(**api_body)
                 else:
