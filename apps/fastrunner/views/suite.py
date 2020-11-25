@@ -147,6 +147,7 @@ class TestCaseSynchronize(GenericViewSet, mixins.UpdateModelMixin):
 
         case_id = instance.id
         case_step = models.CaseStep.objects.filter(case_id=case_id).order_by('step')
+        
         for case in case_step:
             if case.method != 'config':
                 api_body = eval(models.API.objects.get(id=case.apiId).body)

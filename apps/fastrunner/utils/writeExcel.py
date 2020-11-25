@@ -149,21 +149,21 @@ def export_apis(data_list):
     ws = xlwt.Workbook(encoding='utf-8')
     w = ws.add_sheet("API")
     custom_header = [
-        (u'用例ID', 'id'),
-        (u'接口名称-必填', 'name'),
-        (u'请求方式-必填', 'method'),
-        (u'请求地址-必填', 'url'),
-        (u'Header请求头', 'header'),
+        (u'api的id', 'id'),
+        (u'必填-接口名称', 'name'),
+        (u'必填-请求方式', 'method'),
+        (u'必填-请求地址', 'url'),
+        (u'请求头', 'header'),
         (u'循环次数', 'times'),
         (u'Request请求值-json(request请求值，四个值，如果其中一个有值，其他的都要给默认值:{})', 'json'),
         (u'Request请求值-form', 'form'),
         (u'Request请求值-params', 'params'),
         (u'Request请求值-files', 'files'),
-        (u'Extract提取返回值', 'extract'),
-        (u'Validate校验', 'validate'),
-        (u'Variables临时变量', 'variables'),
-        (u'Hooks请求时候执行的脚本方法-请求前', 'setup_hooks'),
-        (u'Hooks请求时候执行的脚本方法-请求后', 'teardown_hooks'),
+        (u'提取返回值', 'extract'),
+        (u'校验', 'validate'),
+        (u'临时变量', 'variables'),
+        (u'预执行脚本', 'setup_hooks'),
+        (u'后执行脚本', 'teardown_hooks'),
     ]
     for r in range(2):
         for i in range(len(custom_header)):
