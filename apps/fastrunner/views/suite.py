@@ -152,10 +152,10 @@ class TestCaseSynchronize(GenericViewSet, mixins.UpdateModelMixin):
                 api_body = eval(models.API.objects.get(id=case.apiId).body)
                 csae_body = eval(case.body)
                 csae_body["request"] = api_body["request"]
-                csae_body["desc"]["header"] = api_body["desc"]["header"]
-                csae_body["desc"]["data"] = api_body["desc"]["data"]
-                csae_body["desc"]["files"] = api_body["desc"]["files"]
-                csae_body["desc"]["params"] = api_body["desc"]["params"]
+                csae_body["desc"]["header"] = api_body["desc"].get("header", {})
+                csae_body["desc"]["data"] = api_body["desc"].get("data", {})
+                csae_body["desc"]["files"] = api_body["desc"].get("files", {})
+                csae_body["desc"]["params"] = api_body["desc"].get("params", {})
 
                 case.url = api_body["request"]["url"]
                 case.method = api_body["request"]["method"]
