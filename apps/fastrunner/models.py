@@ -1,6 +1,9 @@
+from celery import states
+from django_celery_results.models import TASK_STATE_CHOICES
 from markdown import markdown
 from django.db import models
 from django.utils.html import mark_safe
+from picklefield import PickledObjectField
 
 
 class BaseTable(models.Model):
@@ -294,3 +297,39 @@ class Helper(BaseTable):
     title = models.CharField(max_length=255, verbose_name="标题")
     content = models.TextField(verbose_name="内容", null=True, blank=True,)
     is_show = models.BooleanField(default=False, verbose_name="是否展示")
+
+
+class TaskMeta(models.Model):
+    """Task result/status."""
+    task_id = models.CharField('task id', max_length=255, unique=True)
+    status = models.CharField(
+        'state',
+        max_length=50, default=states.PENDING, choices=TASK_STATE_CHOICES,
+    )
+    result = PickledObjectField(null=True, default=None, editable=False)
+    date_done = models.DateTimeField('done at', auto_now=True)
+    traceback = models.TextField('traceback', blank=True, null=True)
+    hidden = models.BooleanField(editable=False, default=False, db_index=True)
+    # TODO compression was enabled by mistake, we need to disable it
+    # but this is a backwards incompatible change that needs planning.
+    meta = PickledObjectField(
+        compress=True, null=True, default=None, editable=False,
+    )
+
+    # objects = managers.TaskManager()
+
+    class Meta:
+        verbose_name = 'task state'
+        verbose_name_plural = 'task states'
+        db_table = 'celery_taskmeta'
+
+    def to_dict(self):
+        return {'task_id': self.task_id,
+                'status': self.status,
+                'result': self.result,
+                'date_done': self.date_done,
+                'traceback': self.traceback,
+                'children': (self.meta or {}).get('children')}
+
+    def __str__(self):
+        return '<Task: {0.task_id} state={0.status}>'.format(self)

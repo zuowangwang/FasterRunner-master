@@ -2,7 +2,7 @@ import json
 import os
 
 from rest_framework import serializers
-from djcelery import models as celery_models
+from django_celery_beat import models as celery_models
 import xlrd
 from xlrd.biffh import XLRDError
 
@@ -260,7 +260,7 @@ class TaskMetaSerializer(serializers.ModelSerializer):
     异步任务结果序列化
     """
     class Meta:
-        model = celery_models.TaskMeta
+        model = models.TaskMeta
         fields = ['task_id', 'id', 'status', 'date_done', 'traceback']
 
 

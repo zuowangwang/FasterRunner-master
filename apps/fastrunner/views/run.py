@@ -5,7 +5,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
-from djcelery import models as celery_models
+from django_celery_beat import models as celery_models
 
 from fastrunner import tasks
 from fastrunner.utils.decorator import request_log

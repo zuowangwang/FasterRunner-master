@@ -2,7 +2,7 @@
 import json
 from fastrunner import models
 from fastrunner.utils.parser import Format
-from djcelery import models as celery_models
+from django_celery_beat import models as celery_models
 
 
 def get_counter(model, pk=None):

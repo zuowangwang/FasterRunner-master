@@ -2,7 +2,7 @@
 from rest_framework import mixins
 from rest_framework.viewsets import GenericViewSet
 from rest_framework.permissions import DjangoModelPermissions
-from djcelery.models import TaskMeta
+from fastrunner.models import TaskMeta
 
 from FasterRunner import pagination
 from fastrunner.serializers import TaskMetaSerializer

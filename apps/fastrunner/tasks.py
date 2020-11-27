@@ -19,7 +19,7 @@ from fastrunner.utils.loader import save_summary, debug_suite, debug_api
 django.setup()
 
 
-@shared_task
+@shared_task(track_started=True)
 def async_debug_api(api, project, name, config=None):
     """异步执行api
     """
@@ -27,7 +27,7 @@ def async_debug_api(api, project, name, config=None):
     save_summary(name, summary, project)
 
 
-@shared_task
+@shared_task(track_started=True)
 def async_debug_test(test_case, project, name, report_name, config, test_data):
     """异步执行testcase
     """
@@ -35,7 +35,7 @@ def async_debug_test(test_case, project, name, report_name, config, test_data):
     save_summary(report_name, summary, project)
 
 
-@shared_task
+@shared_task(track_started=True)
 def async_debug_suite(suite, project, obj, report, config):
     """异步执行suite
     """
@@ -43,7 +43,7 @@ def async_debug_suite(suite, project, obj, report, config):
     save_summary(report, summary, project)
 
 
-@shared_task
+@shared_task(track_started=True)
 def schedule_debug_suite(*args, **kwargs):
     """定时任务
     """
@@ -128,7 +128,7 @@ def schedule_debug_suite(*args, **kwargs):
                 print('邮件发送失败')
 
 
-@shared_task
+@shared_task(track_started=True)
 def del_report():
     """定时删除报告
 

@@ -16,7 +16,7 @@ import os
 import sys
 from collections import OrderedDict
 
-import djcelery
+import django_celery_beat
 
 # *******configThis******** get form config.conf 快速切换环境
 env = 'dev'
@@ -75,7 +75,8 @@ INSTALLED_APPS = [
     'fastrunner',
     'rest_framework',
     'corsheaders',
-    'djcelery',
+    'django_celery_results',
+    'django_celery_beat',
     'rest_framework.authtoken',
     'crispy_forms',
     'reversion',
@@ -173,7 +174,7 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "static"),
 )
-
+# STATIC_ROOT = os.path.join(BASE_DIR, "static")
 # rest_framework config
 
 REST_FRAMEWORK = {
@@ -227,22 +228,23 @@ CORS_ALLOW_HEADERS = (
     'x-requested-with',
 )
 
-djcelery.setup_loader()
+# django_celery_beat.setup_loader()
 CELERY_ENABLE_UTC = True
 CELERY_TIMEZONE = 'Asia/Shanghai'
 BROKER_URL = "amqp://guest:guest@127.0.0.1:5672//"
-CELERYBEAT_SCHEDULER = 'djcelery.schedulers.DatabaseScheduler'
-CELERY_RESULT_BACKEND = 'djcelery.backends.database:DatabaseBackend'
+CELERYBEAT_SCHEDULER = 'django_celery_beat.schedulers.DatabaseScheduler'
+CELERY_RESULT_BACKEND = 'django_celery_beat.backends.database:DatabaseBackend'
+# CELERY_RESULT_BACKEND = 'django-db'
 # 序列化任务有效负载的默认序列化程序
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 
 CELERY_TASK_RESULT_EXPIRES = 3600
-CELERYD_CONCURRENCY = 1 if DEBUG else 4  # 并发的worker数量
-CELERYD_MAX_TASKS_PER_CHILD = 100  # 每个worker最多执行100次任务被销毁，防止内存泄漏
+CELERYD_CONCURRENCY = 4 if DEBUG else 4  # 并发的worker数量
+CELERYD_MAX_TASKS_PER_CHILD = 3  # 每个worker最多执行100次任务被销毁，防止内存泄漏
 CELERY_FORCE_EXECV = True  # 有些情况可以防止死锁
-CELERY_TASK_TIME_LIMIT = 3*60*60  # 单个任务最大运行时间
+CELERY_TASK_TIME_LIMIT = 3 * 60  # 单个任务最大运行时间
 
 # 邮件
 EMAIL_HOST = email_host
