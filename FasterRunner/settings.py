@@ -76,6 +76,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'djcelery',
+    # 'django_celery_results'
     'rest_framework.authtoken',
     'crispy_forms',
     'reversion',
