@@ -223,3 +223,7 @@ logs/
 data/
 .idea/
 apps/fastrunner/migrations/
+static/
+w1.pid
+nohup.out
+uwsgi.ini
