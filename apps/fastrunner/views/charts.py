@@ -8,7 +8,7 @@ from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 
 from fastrunner import models, serializers
-from fastrunner.utils.common import get_betweent_date, gen_summary
+from fastrunner.utils.common import get_between_date, gen_summary
 
 
 class ChartShow(GenericViewSet):
@@ -28,7 +28,7 @@ class ChartShow(GenericViewSet):
         """
         start_date = request.data.get('start_date')
         complete_date = request.data.get('complete_date')
-        between_date = get_betweent_date(start_date, complete_date)
+        between_date = get_between_date(start_date, complete_date)
 
         result = {}
         for date in between_date:
