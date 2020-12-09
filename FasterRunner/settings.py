@@ -331,6 +331,7 @@ CONSTANCE_CONFIG = OrderedDict({
     'retention_time': (30, '保留报告时间(单位天)', int),
     'del_mysql_backup': (30, '保留数据库备份时间(单位天)', int),
     'email_from_name': ('测试自动化平台', '邮件自定义中文收件人', str),
+    'charts_show_date': (7, '运行图表默认查询间隔(单位天)', int),
 })
 
 # 在导入数据时使用数据库事务，默认False

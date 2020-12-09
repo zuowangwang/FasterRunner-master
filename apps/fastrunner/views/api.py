@@ -37,6 +37,7 @@ class APITemplateView(GenericViewSet):
         queryset = self.get_queryset().filter(project__id=project).order_by('-update_time')
 
         if search != '':
+            # queryset = queryset.filter(name__contains=search)
             queryset = queryset.filter(Q(name__contains=search) | Q(url__contains=search))
 
         if node != '':
