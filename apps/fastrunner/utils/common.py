@@ -44,7 +44,7 @@ def gen_summary(obj):
     return dict(sum(map(Counter, data), Counter()))
 
 
-def get_betweent_date(start, end):
+def get_between_date(start, end):
     """
     Get the intermediate period.
     """
