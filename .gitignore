@@ -216,7 +216,10 @@ pyvenv.cfg
 .venv
 pip-selfcheck.json
 
-!/myconfig.conf
-!/tempWorkDir/
-!/media/
-!/logs/
+myconfig.conf
+tempWorkDir/
+media/
+logs/
+data/
+.idea/
+apps/fastrunner/migrations/
