@@ -243,13 +243,23 @@ def debug_suite(suite, project, obj, config, save=True):
         if save:
             save_summary("", summary, project, type=1)
         for testcase in suite:
-            variable_data = {
-                "extracts": testcase.get("extract", []),
-                "id": project,
-                "content": summary['content'].get(testcase['name'], ""),
-                "response": summary['response'].get(testcase['name'], "")
-            }
-            add_global_variable(**variable_data)
+            if isinstance(testcase, list):
+                for t in testcase:
+                    variable_data = {
+                        "extracts": t.get("extract", []),
+                        "id": project,
+                        "content": summary['content'].get(t['name'], ""),
+                        "response": summary['response'].get(t['name'], "")
+                    }
+                    add_global_variable(**variable_data)
+            if isinstance(testcase, dict):
+                variable_data = {
+                    "extracts": testcase.get("extract", []),
+                    "id": project,
+                    "content": summary['content'].get(testcase['name'], ""),
+                    "response": summary['response'].get(testcase['name'], "")
+                }
+                add_global_variable(**variable_data)
         return summary
     except Exception as e:
         raise SyntaxError(str(e))

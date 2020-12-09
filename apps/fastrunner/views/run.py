@@ -54,7 +54,7 @@ def run_api(request):
         temp_baseurl = host.base_url if host.base_url else ''
 
     if config and host != "请选择":
-        config["variables"].extend(temp_config)
+        config.get("variables", []).extend(temp_config)
         if temp_baseurl:
             config["request"]["base_url"] = temp_baseurl
     if not config and host != "请选择":
@@ -101,7 +101,7 @@ def run_api_pk(request, **kwargs):
         temp_baseurl = host.base_url if host.base_url else ''
 
     if config and host != "请选择":
-        config["variables"].extend(temp_config)
+        config.get("variables", []).extend(temp_config)
         if temp_baseurl:
             config["request"]["base_url"] = temp_baseurl
     if not config and host != "请选择":
@@ -156,7 +156,7 @@ def run_api_tree(request):
         temp_baseurl = host.base_url if host.base_url else ''
 
     if config and host != "请选择":
-        config["variables"].extend(temp_config)
+        config.get("variables", []).extend(temp_config)
         if temp_baseurl:
             config["request"]["base_url"] = temp_baseurl
     if not config and host != "请选择":
@@ -231,7 +231,7 @@ def run_testsuite_pk(request, **kwargs):
         test_case.append(parse_host(host, body))
 
     if config and host != "请选择":
-        config["variables"].extend(temp_config)
+        config.get('variables', []).extend(temp_config)
         if temp_baseurl:
             config["request"]["base_url"] = temp_baseurl
     if not config and host != "请选择":
@@ -314,7 +314,7 @@ def run_suite_tree(request):
                     testcase_list.append(parse_host(host, body))
                 # [[{scripts}, {scripts}], [{scripts}, {scripts}]]
                 if config and host != "请选择":
-                    config["variables"].extend(temp_config)
+                    config.get("variables", []).extend(temp_config)
                     if temp_baseurl:
                         config["request"]["base_url"] = temp_baseurl
                 if not config and host != "请选择":

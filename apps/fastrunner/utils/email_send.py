@@ -12,6 +12,7 @@ from datetime import datetime
 from jinja2 import Environment, FileSystemLoader, Template
 from django.core.mail import EmailMultiAlternatives
 
+from constance import config
 from FasterRunner.settings import EMAIL_FROM, BASE_DIR, REPORTS_HOST
 from fastrunner.utils.writeExcel import write_excel_log, get_error_response_content
 
@@ -117,7 +118,8 @@ def send_result_email(send_subject, send_to, send_cc, send_text_content=None, se
     :return: bool
     """
     try:
-        msg = EmailMultiAlternatives(subject=send_subject, from_email=from_email, to=send_to, cc=send_cc)
+        msg = EmailMultiAlternatives(subject=send_subject, from_email=from_email, to=send_to, cc=send_cc,
+                                     headers={'From': config.email_from_name})
         if send_text_content:
             msg.attach_alternative(send_text_content, 'text/plain')
         if send_html_content:

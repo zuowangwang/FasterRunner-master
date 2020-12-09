@@ -18,7 +18,7 @@ from django.conf.urls import url, include
 from django.urls import path
 from rest_framework.routers import DefaultRouter
 
-from fastrunner.views import project, api, config, schedule, run, suite, report, download, taskmeta, lock_files, help
+from fastrunner.views import project, api, config, schedule, run, suite, report, download, taskmeta, lock_files, help, charts
 
 router = DefaultRouter()
 # 项目信息
@@ -125,4 +125,8 @@ urlpatterns = [
         "post": "add",
         "delete": "delete"
     })),
+
+    path('chart_shows/', charts.ChartShow.as_view({
+        'get': 'get',
+    }))
 ]
