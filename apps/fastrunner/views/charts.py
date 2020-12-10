@@ -22,7 +22,7 @@ class ChartShow(GenericViewSet):
         project_id = self.request.data.get('project')
         return models.Report.objects.filter(project_id=project_id)
 
-    def get(self, request, **kwargs):
+    def post(self, request, **kwargs):
         """Get custom time api run data.
 
         """
