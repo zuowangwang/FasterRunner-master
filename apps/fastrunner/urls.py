@@ -127,6 +127,6 @@ urlpatterns = [
     })),
 
     path('chart_shows/', charts.ChartShow.as_view({
-        'get': 'get',
+        'post': 'post',
     }))
 ]
